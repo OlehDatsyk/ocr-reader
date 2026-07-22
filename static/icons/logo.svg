@@ -1,0 +1,5 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OCR Reader logo">
+  <rect x="1" y="1" width="30" height="30" rx="8" fill="#0f9c7c"/>
+  <path d="M8 11h4M8 16h9M8 21h6" stroke="#04231c" stroke-width="2" stroke-linecap="round"/>
+  <path d="M23 9v14" stroke="#04231c" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.5 4"/>
+</svg>

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Upload — {{ app_name }}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1 class="page-title">Extract text from an image</h1>
+  <p class="page-subtitle">Upload a photo, scan or screenshot and let the vision model read it for you.</p>
+</div>
+
+{% if not openai_configured %}
+<div class="banner banner-warn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span>No OpenAI API key is configured yet. Add <code>OPENAI_API_KEY</code> to your <code>.env</code> file and restart the server before extracting text. See the <a href="/settings">Settings</a> page for details.</span>
+</div>
+{% endif %}
+
+<form id="ocr-form" class="workspace-grid">
+  <section class="card card-pad">
+    <p class="section-label">Source image</p>
+
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
+      <div id="dropzone-empty">
+        <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2Z"/></svg>
+        <p class="dropzone-title">Drag & drop an image</p>
+        <p class="dropzone-hint">or choose a file / use your camera. JPEG, PNG, WEBP, GIF or BMP, up to a few MB.</p>
+        <div class="dropzone-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="browse-btn">Browse files</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="camera-btn">Use camera</button>
+        </div>
+      </div>
+      <div class="dropzone-preview" id="dropzone-preview">
+        <img id="preview-image" alt="Selected image preview" />
+        <div class="scan-beam" id="scan-beam"></div>
+      </div>
+    </div>
+
+    <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" hidden />
+    <input type="file" id="camera-input" accept="image/*" capture="environment" hidden />
+
+    <div class="field-row">
+      <div class="field">
+        <label for="language-select">Language</label>
+        <select id="language-select" name="language">
+          {% for value, label in languages %}
+          <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Structured output</div>
+        <div class="toggle-desc">Also classify text into headings, paragraphs, lists and tables.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="structured-toggle" />
+        <span class="switch-track"></span>
+        <span class="switch-thumb"></span>
+      </label>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Stream results</div>
+        <div class="toggle-desc">Show text as it is generated instead of waiting for the full result.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="stream-toggle" checked />
+        <span class="switch-track"></span>
+        <span class="switch-thumb"></span>
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" id="extract-btn" style="margin-top:8px;" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+      Extract text
+    </button>
+  </section>
+
+  <section class="card card-pad">
+    <p class="section-label">Extracted text</p>
+    <div class="result-panel">
+      <div class="result-meta" id="result-meta" style="display:none;"></div>
+      <div class="result-text" id="result-text" data-placeholder="Extracted text will appear here once you upload an image and click Extract text."></div>
+      <div class="result-actions">
+        <button type="button" class="btn btn-secondary btn-sm" id="copy-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy text
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="download-txt-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download .txt
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="download-md-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download .md
+        </button>
+      </div>
+    </div>
+  </section>
+</form>
+
+{% endblock %}
+{% block scripts %}
+<script>OCRReader.initUploadPage();</script>
+{% endblock %}

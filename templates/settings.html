@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Settings — {{ app_name }}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1 class="page-title">Settings</h1>
+  <p class="page-subtitle">Configuration is read from your <code>.env</code> file at startup. Edit that file and restart the server to change any of these values.</p>
+</div>
+
+{% if not openai_configured %}
+<div class="banner banner-warn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span><strong>OPENAI_API_KEY</strong> is not set. Copy <code>.env.example</code> to <code>.env</code>, add your key, and restart the app.</span>
+</div>
+{% else %}
+<div class="banner banner-info">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  <span>OpenAI API key detected. The app is ready to extract text.</span>
+</div>
+{% endif %}
+
+<div class="card card-pad">
+  <p class="section-label">Environment</p>
+  <div class="settings-grid">
+    <div class="settings-row">
+      <div>
+        <div class="settings-key">Application</div>
+        <div class="settings-hint">Name and version reported by the API.</div>
+      </div>
+      <div class="settings-value">{{ app_name }} v{{ app_version }}</div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-key">Environment</div>
+        <div class="settings-hint">Value of ENVIRONMENT in .env</div>
+      </div>
+      <div class="settings-value">{{ environment }}</div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-key">Vision model</div>
+        <div class="settings-hint">Value of OPENAI_MODEL in .env</div>
+      </div>
+      <div class="settings-value">{{ openai_model }}</div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-key">Max upload size</div>
+        <div class="settings-hint">Value of MAX_UPLOAD_SIZE_MB in .env</div>
+      </div>
+      <div class="settings-value">{{ max_upload_size_mb }} MB</div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-key">API key</div>
+        <div class="settings-hint">Value of OPENAI_API_KEY in .env (never shown)</div>
+      </div>
+      <div class="settings-value">{{ 'sk-••••••••••••••••' if openai_configured else 'not set' }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-pad" style="margin-top:16px;">
+  <p class="section-label">Appearance</p>
+  <div class="toggle-row" style="padding-top:0;">
+    <div>
+      <div class="toggle-label">Dark mode</div>
+      <div class="toggle-desc">Stored locally in your browser, independent of the server.</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="settings-theme-toggle" />
+      <span class="switch-track"></span>
+      <span class="switch-thumb"></span>
+    </label>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>OCRReader.initSettingsPage();</script>
+{% endblock %}

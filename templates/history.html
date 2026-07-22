@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}History — {{ app_name }}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1 class="page-title">History</h1>
+  <p class="page-subtitle">Every extraction is saved locally in SQLite so you can revisit or export it later.</p>
+</div>
+
+<div class="history-toolbar">
+  <span class="page-subtitle" id="history-count">Loading…</span>
+  <button type="button" class="btn btn-danger btn-sm" id="clear-history-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Clear history
+  </button>
+</div>
+
+<div class="history-list" id="history-list"></div>
+
+<div class="empty-state" id="history-empty" style="display:none;">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13a9 9 0 1 0 .5-4.5L3 8"/><path d="M12 7v5l4 2"/></svg>
+  <p>No extractions yet. Results you extract will show up here.</p>
+  <a class="btn btn-secondary btn-sm" href="/">Upload an image</a>
+</div>
+
+<div class="modal-overlay" id="history-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-filename">Extraction</h2>
+      <button type="button" class="icon-btn" id="modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="result-meta" id="modal-meta" style="margin-bottom:12px;"></div>
+      <div class="result-text" id="modal-text"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary btn-sm" id="modal-copy-btn">Copy text</button>
+      <a class="btn btn-secondary btn-sm" id="modal-download-txt" href="#">Download .txt</a>
+      <a class="btn btn-secondary btn-sm" id="modal-download-md" href="#">Download .md</a>
+      <button type="button" class="btn btn-danger btn-sm" id="modal-delete-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>OCRReader.initHistoryPage();</script>
+{% endblock %}

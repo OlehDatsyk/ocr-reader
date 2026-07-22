@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "esbenp.prettier-vscode",
+        "ecmel.vscode-html-css",
+        "humao.rest-client"
+    ]
+}
