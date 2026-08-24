@@ -124,7 +124,7 @@ Before working with any vision model, it helps to understand what an image actua
 
 ### Pixels
 
-A digital image is a grid of **pixels** (picture elements). Each pixel holds one or more numeric values describing its color and brightness. A 1920×1080 image contains 2,073,600 individual pixels - every vision system, no matter how advanced, ultimately starts from this grid of numbers.
+A digital image is a grid of **pixels** (picture elements). Each pixel holds one or more numeric values describing its color and brightness. A 1920x1080 image contains 2,073,600 individual pixels - every vision system, no matter how advanced, ultimately starts from this grid of numbers.
 
 ### Images as Arrays
 

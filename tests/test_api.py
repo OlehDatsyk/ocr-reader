@@ -16,7 +16,9 @@ def _patch_extract(monkeypatch, text: str = "Hello from the test double."):
     async def fake_extract(self, image, language):
         return text
 
-    monkeypatch.setattr(router_ocr.ocr_service, "extract", fake_extract.__get__(router_ocr.ocr_service))
+    monkeypatch.setattr(
+        router_ocr.ocr_service, "extract", fake_extract.__get__(router_ocr.ocr_service)
+    )
 
 
 def _patch_extract_structured(monkeypatch):
@@ -24,7 +26,11 @@ def _patch_extract_structured(monkeypatch):
         return OCRStructuredExtraction(
             detected_language="English",
             summary="A short test document.",
-            blocks=[OCRTextBlock(type="paragraph", text="Hello from structured mode.", order=0)],
+            blocks=[
+                OCRTextBlock(
+                    type="paragraph", text="Hello from structured mode.", order=0
+                )
+            ],
             full_text="Hello from structured mode.",
         )
 
@@ -60,7 +66,7 @@ def test_settings_page_renders(client):
 
 
 def test_extract_plain_text(client, monkeypatch, tiny_png_bytes):
-    _patch_extract(monkeypatch, text="Invoice #1234 — Total: $42.00")
+    _patch_extract(monkeypatch, text="Invoice #1234 - Total: $42.00")
     response = client.post(
         "/api/ocr/extract",
         files={"file": ("invoice.png", tiny_png_bytes, "image/png")},
@@ -68,7 +74,7 @@ def test_extract_plain_text(client, monkeypatch, tiny_png_bytes):
     )
     assert response.status_code == 200
     body = response.json()
-    assert body["text"] == "Invoice #1234 — Total: $42.00"
+    assert body["text"] == "Invoice #1234 - Total: $42.00"
     assert body["char_count"] == len(body["text"])
     assert body["id"] > 0
 

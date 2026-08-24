@@ -7,11 +7,11 @@ Responses API's vision (image input) capability.
 Three capabilities are exposed, matching the three ways the frontend can
 ask for text:
 
-1. :meth:`OCRService.extract` — plain extraction, returns raw text.
-2. :meth:`OCRService.extract_structured` — same call, but constrained to
+1. :meth:`OCRService.extract` - plain extraction, returns raw text.
+2. :meth:`OCRService.extract_structured` - same call, but constrained to
    the :class:`schemas.OCRStructuredExtraction` Pydantic schema using the
    Responses API structured-output ("parse") helper.
-3. :meth:`OCRService.stream_extract` — streams text deltas back as they
+3. :meth:`OCRService.stream_extract` - streams text deltas back as they
    are generated, for a live "typing" effect in the UI.
 
 The service is intentionally the *only* place in the codebase that talks
@@ -51,7 +51,9 @@ def _language_instruction(language: OCRLanguage) -> str:
     return f"The dominant language of the document is expected to be {language.value.title()}."
 
 
-def _build_input(image: ValidatedImage, language: OCRLanguage, extra: str = "") -> list[dict]:
+def _build_input(
+    image: ValidatedImage, language: OCRLanguage, extra: str = ""
+) -> list[dict]:
     prompt = f"{_BASE_INSTRUCTIONS} {_language_instruction(language)} {extra}".strip()
     return [
         {
@@ -102,7 +104,9 @@ class OCRService:
 
         text = (response.output_text or "").strip()
         if not text:
-            raise OCRProcessingError("The model returned an empty response for this image.")
+            raise OCRProcessingError(
+                "The model returned an empty response for this image."
+            )
         return text
 
     async def extract_structured(
@@ -132,7 +136,9 @@ class OCRService:
 
         parsed = response.output_parsed
         if parsed is None:
-            raise OCRProcessingError("The model did not return a valid structured response.")
+            raise OCRProcessingError(
+                "The model did not return a valid structured response."
+            )
         return parsed
 
     async def stream_extract(
@@ -157,7 +163,9 @@ class OCRService:
                     if event.type == "response.output_text.delta":
                         yield event.delta
                     elif event.type == "response.error":
-                        raise OCRProcessingError(f"Streaming error from OpenAI: {event.error}")
+                        raise OCRProcessingError(
+                            f"Streaming error from OpenAI: {event.error}"
+                        )
                 await stream.get_final_response()
         except AuthenticationError as exc:
             logger.error("OpenAI authentication failed during streaming: %s", exc)
@@ -166,9 +174,11 @@ class OCRService:
             ) from exc
         except APIError as exc:
             logger.error("OpenAI API error during streaming extraction: %s", exc)
-            raise OCRProcessingError(f"The vision model streaming request failed: {exc}") from exc
+            raise OCRProcessingError(
+                f"The vision model streaming request failed: {exc}"
+            ) from exc
 
 
-# Module-level singleton — the service holds no per-request state, only a
+# Module-level singleton - the service holds no per-request state, only a
 # lazily created HTTP client, so sharing one instance across requests is safe.
 ocr_service = OCRService()

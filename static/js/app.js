@@ -1,5 +1,5 @@
 /* =============================================================================
-   OCR Reader — frontend application logic
+   OCR Reader - frontend application logic
    No build step, no framework: plain ES2020 running directly in the browser.
    ============================================================================= */
 
@@ -97,7 +97,7 @@ const OCRReader = (() => {
 
   function toMarkdown(filename, language, model, text) {
     return [
-      `# OCR Result — ${filename}`,
+      `# OCR Result - ${filename}`,
       "",
       `- **Detected language:** ${language}`,
       `- **Model:** ${model}`,
@@ -176,13 +176,13 @@ const OCRReader = (() => {
       dropzone.addEventListener(evt, (e) => {
         e.preventDefault();
         dropzone.classList.add("drag-active");
-      })
+      }),
     );
     ["dragleave", "drop"].forEach((evt) =>
       dropzone.addEventListener(evt, (e) => {
         e.preventDefault();
         dropzone.classList.remove("drag-active");
-      })
+      }),
     );
     dropzone.addEventListener("drop", (e) => {
       const file = e.dataTransfer.files && e.dataTransfer.files[0];
@@ -191,17 +191,23 @@ const OCRReader = (() => {
 
     function setBusy(isBusy) {
       extractBtn.disabled = isBusy || !selectedFile;
-      extractBtn.textContent = isBusy ? "Extracting…" : "";
+      extractBtn.textContent = isBusy ? "Extracting..." : "";
       if (!isBusy) {
         extractBtn.innerHTML =
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> Extract text';
       } else {
-        extractBtn.textContent = "Extracting…";
+        extractBtn.textContent = "Extracting...";
       }
       scanBeam.classList.toggle("scanning", isBusy);
     }
 
-    function renderMeta({ detected_language, model, char_count, word_count, structured }) {
+    function renderMeta({
+      detected_language,
+      model,
+      char_count,
+      word_count,
+      structured,
+    }) {
       resultMeta.style.display = "flex";
       resultMeta.innerHTML = "";
       const chips = [
@@ -254,7 +260,7 @@ const OCRReader = (() => {
         resultText.textContent = "";
         resultText.setAttribute(
           "data-placeholder",
-          `Extraction failed: ${err.message || "unknown error"}`
+          `Extraction failed: ${err.message || "unknown error"}`,
         );
       } finally {
         setBusy(false);
@@ -262,7 +268,10 @@ const OCRReader = (() => {
     }
 
     async function runSyncExtraction(formData, structured) {
-      const response = await fetch("/api/ocr/extract", { method: "POST", body: formData });
+      const response = await fetch("/api/ocr/extract", {
+        method: "POST",
+        body: formData,
+      });
       if (!response.ok) throw new Error(await parseErrorResponse(response));
       const result = await response.json();
       resultText.textContent = result.text;
@@ -273,9 +282,13 @@ const OCRReader = (() => {
     }
 
     async function runStreamingExtraction(formData, language) {
-      const response = await fetch("/api/ocr/stream", { method: "POST", body: formData });
+      const response = await fetch("/api/ocr/stream", {
+        method: "POST",
+        body: formData,
+      });
       if (!response.ok) throw new Error(await parseErrorResponse(response));
-      if (!response.body) throw new Error("Streaming is not supported in this browser.");
+      if (!response.body)
+        throw new Error("Streaming is not supported in this browser.");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -326,7 +339,11 @@ const OCRReader = (() => {
 
     downloadTxtBtn.addEventListener("click", () => {
       if (!lastResult) return;
-      downloadBlob(`${baseName(lastResult.filename)}.txt`, lastResult.text, "text/plain");
+      downloadBlob(
+        `${baseName(lastResult.filename)}.txt`,
+        lastResult.text,
+        "text/plain",
+      );
     });
 
     downloadMdBtn.addEventListener("click", () => {
@@ -335,7 +352,7 @@ const OCRReader = (() => {
         lastResult.filename,
         lastResult.detected_language,
         lastResult.model,
-        lastResult.text
+        lastResult.text,
       );
       downloadBlob(`${baseName(lastResult.filename)}.md`, md, "text/markdown");
     });
@@ -439,7 +456,9 @@ const OCRReader = (() => {
       row.querySelector(".history-preview").textContent = item.preview;
       const metaSpans = row.querySelectorAll(".history-meta-item");
       metaSpans[0].textContent = item.language;
-      metaSpans[1].textContent = new Date(item.created_at.replace(" ", "T") + "Z").toLocaleString();
+      metaSpans[1].textContent = new Date(
+        item.created_at.replace(" ", "T") + "Z",
+      ).toLocaleString();
 
       row.addEventListener("click", async (e) => {
         if (e.target.closest(".icon-btn")) return;
@@ -462,7 +481,7 @@ const OCRReader = (() => {
     }
 
     async function loadHistory() {
-      countEl.textContent = "Loading…";
+      countEl.textContent = "Loading...";
       const response = await fetch("/api/history?limit=100");
       if (!response.ok) {
         countEl.textContent = "Failed to load history";
@@ -495,7 +514,9 @@ const OCRReader = (() => {
     const toggle = document.getElementById("settings-theme-toggle");
     if (!toggle) return;
     toggle.checked = getTheme() === "dark";
-    toggle.addEventListener("change", () => setTheme(toggle.checked ? "dark" : "light"));
+    toggle.addEventListener("change", () =>
+      setTheme(toggle.checked ? "dark" : "light"),
+    );
   }
 
   /* ---------------------------------------------------------------------- */

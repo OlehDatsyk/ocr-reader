@@ -5,8 +5,8 @@ HTTP endpoints for turning an uploaded image into text.
 
 Three endpoints, mirroring ``OCRService``:
 
-* ``POST /api/ocr/extract``        — plain or structured extraction (JSON body back).
-* ``POST /api/ocr/stream``         — Server-Sent-Events stream of text deltas.
+* ``POST /api/ocr/extract``        - plain or structured extraction (JSON body back).
+* ``POST /api/ocr/stream``         - Server-Sent-Events stream of text deltas.
 """
 
 from __future__ import annotations
@@ -44,7 +44,9 @@ async def extract_text(
         blocks = parsed.blocks
     else:
         text = await ocr_service.extract(image, language)
-        detected_language = language.value if language != OCRLanguage.AUTO else "auto-detected"
+        detected_language = (
+            language.value if language != OCRLanguage.AUTO else "auto-detected"
+        )
         blocks = []
 
     record_id = save_result(

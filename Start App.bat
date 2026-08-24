@@ -3,9 +3,9 @@ setlocal enabledelayedexpansion
 title OCR Reader - Startup
 cd /d "%~dp0"
 
-echo ============================================================
-echo   OCR Reader - Startup
-echo ============================================================
+echo ==================================================
+echo   OCR Reader - Startup (Was made by Oleh Datsyk)
+echo ==================================================
 echo.
 
 REM --- Step 1: Verify Python is installed -------------------------------

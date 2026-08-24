@@ -47,7 +47,7 @@ def make_preview(text: str, max_chars: int = 160) -> str:
     collapsed = re.sub(r"\s+", " ", text).strip()
     if len(collapsed) <= max_chars:
         return collapsed
-    return collapsed[: max_chars - 1].rstrip() + "…"
+    return collapsed[: max_chars - 1].rstrip() + "..."
 
 
 def utc_now_iso() -> str:
@@ -55,10 +55,12 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def to_markdown(filename: str, language: str, model: str, created_at: str, text: str) -> str:
+def to_markdown(
+    filename: str, language: str, model: str, created_at: str, text: str
+) -> str:
     """Render an extraction result as a small, self-contained Markdown document."""
     lines = [
-        f"# OCR Result — {filename}",
+        f"# OCR Result - {filename}",
         "",
         f"- **Detected language:** {language}",
         f"- **Model:** {model}",

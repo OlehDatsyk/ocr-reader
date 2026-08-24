@@ -3,7 +3,7 @@ router_pages.py
 =================
 Serves the server-rendered HTML shell for the dashboard. All dynamic data
 (history, extraction results) is fetched client-side from the ``/api/*``
-JSON endpoints defined in ``router_ocr.py`` and ``router_history.py`` — these
+JSON endpoints defined in ``router_ocr.py`` and ``router_history.py`` - these
 routes only render the static page scaffolding via Jinja2.
 """
 
@@ -21,7 +21,9 @@ from utils import LANGUAGE_LABELS
 
 router = APIRouter(tags=["pages"])
 
-templates = Jinja2Templates(directory=str(Path(__file__).resolve().parent / "templates"))
+templates = Jinja2Templates(
+    directory=str(Path(__file__).resolve().parent / "templates")
+)
 
 _LANGUAGE_OPTIONS = [(lang.value, label) for lang, label in LANGUAGE_LABELS.items()]
 
@@ -38,12 +40,16 @@ def _base_context(active: str) -> dict:
 
 @router.get("/", response_class=HTMLResponse)
 async def page_dashboard(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse(request, "index.html", _base_context(active="upload"))
+    return templates.TemplateResponse(
+        request, "index.html", _base_context(active="upload")
+    )
 
 
 @router.get("/history", response_class=HTMLResponse)
 async def page_history(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse(request, "history.html", _base_context(active="history"))
+    return templates.TemplateResponse(
+        request, "history.html", _base_context(active="history")
+    )
 
 
 @router.get("/settings", response_class=HTMLResponse)

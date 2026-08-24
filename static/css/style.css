@@ -1,6 +1,6 @@
 /* =============================================================================
-   OCR Reader — stylesheet
-   Design language: "optical instrument" — a quiet, precise enterprise shell
+   OCR Reader - stylesheet
+   Design language: "optical instrument" - a quiet, precise enterprise shell
    built around a single signature motif (the scan beam) that ties every
    screen back to the literal act of scanning a document.
    ============================================================================= */
@@ -20,11 +20,16 @@
   --accent-soft: #e1f5ef;
   --danger: #d1373f;
   --danger-soft: #fbe9ea;
-  --shadow-card: 0 1px 2px rgba(18, 24, 38, 0.06), 0 1px 1px rgba(18, 24, 38, 0.04);
+  --shadow-card:
+    0 1px 2px rgba(18, 24, 38, 0.06), 0 1px 1px rgba(18, 24, 38, 0.04);
 
   /* Typography */
-  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 
   /* Layout */
   --radius-sm: 6px;
@@ -153,7 +158,9 @@ button {
   text-decoration: none;
   font-size: 13.5px;
   font-weight: 500;
-  transition: background-color 120ms ease, color 120ms ease;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
 }
 
 .nav-link svg {
@@ -328,7 +335,9 @@ button {
   padding: 24px;
   cursor: pointer;
   overflow: hidden;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
 }
 
 .dropzone::before,
@@ -417,7 +426,13 @@ button {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--accent) 80%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent) 20%,
+    var(--accent) 80%,
+    transparent
+  );
   box-shadow: 0 0 10px 1px var(--accent);
   top: 0;
   opacity: 0;
@@ -973,7 +988,9 @@ input:focus {
   font-weight: 500;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
   z-index: 200;
 }
 
