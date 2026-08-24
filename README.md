@@ -116,25 +116,25 @@ easy to navigate, easy to reason about, easy to keep under the project's
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  Presentation                                                    │
-│  router_pages.py   -> server-rendered HTML (Jinja2)                │
-│  router_ocr.py      -> OCR HTTP endpoints (extract / stream)        │
-│  router_history.py  -> history HTTP endpoints                       │
-│  static/, templates/ -> HTML, CSS, JS                              │
+│  Presentation                                                   │
+│  router_pages.py   -> server-rendered HTML (Jinja2)             │
+│  router_ocr.py      -> OCR HTTP endpoints (extract / stream)    │
+│  router_history.py  -> history HTTP endpoints                   │
+│  static/, templates/ -> HTML, CSS, JS                           │
 ├─────────────────────────────────────────────────────────────────┤
-│  Application services                                             │
-│  ocr_service.py      -> talks to the OpenAI Responses API           │
-│  image_service.py    -> validates & encodes uploaded images         │
-│  history_service.py  -> history CRUD operations                     │
+│  Application services                                           │
+│  ocr_service.py      -> talks to the OpenAI Responses API       │
+│  image_service.py    -> validates & encodes uploaded images     │
+│  history_service.py  -> history CRUD operations                 │
 ├─────────────────────────────────────────────────────────────────┤
-│  Domain                                                           │
-│  schemas.py       -> Pydantic v2 models (the shared "contract")     │
-│  exceptions.py    -> typed application errors                       │
+│  Domain                                                         │
+│  schemas.py       -> Pydantic v2 models (the shared "contract") │
+│  exceptions.py    -> typed application errors                   │
 ├─────────────────────────────────────────────────────────────────┤
-│  Infrastructure                                                   │
-│  database.py       -> SQLite connection + schema                    │
-│  config.py          -> environment-variable driven settings         │
-│  logging_config.py  -> structured logging setup                     │
+│  Infrastructure                                                 │
+│  database.py       -> SQLite connection + schema                │
+│  config.py          -> environment-variable driven settings     │
+│  logging_config.py  -> structured logging setup                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -157,40 +157,40 @@ Key design decisions:
 
 ```
 ocr-reader/
-├── main.py                  FastAPI app, lifespan, router wiring
-├── config.py                Environment-variable settings (Pydantic v2)
-├── logging_config.py        Console + rotating file logging
-├── database.py               SQLite connection + schema
-├── schemas.py                 Pydantic v2 request/response models
-├── exceptions.py               Typed errors + FastAPI exception handlers
-├── utils.py                    Small shared helpers
-├── image_service.py            Upload validation (magic-byte sniffing)
-├── ocr_service.py               OpenAI Responses API integration
-├── history_service.py           History CRUD
-├── router_pages.py               HTML page routes
-├── router_ocr.py                  OCR extraction routes
-├── router_history.py               History routes
+├── main.py FastAPI app, lifespan, router wiring
+├── config.py Environment-variable settings (Pydantic v2)
+├── logging_config.py Console + rotating file logging
+├── database.py SQLite connection + schema
+├── schemas.py Pydantic v2 request/response models
+├── exceptions.py Typed errors + FastAPI exception handlers
+├── utils.py Small shared helpers
+├── image_service.py Upload validation (magic-byte sniffing)
+├── ocr_service.py OpenAI Responses API integration
+├── history_service.py History CRUD
+├── router_pages.py HTML page routes
+├── router_ocr.py OCR extraction routes
+├── router_history.py History routes
 ├── static/
-│   ├── css/style.css              All styling, incl. dark mode
-│   ├── js/app.js                  All frontend behaviour
+│   ├── css/style.css All styling, incl. dark mode
+│   ├── js/app.js All frontend behaviour
 │   ├── icons/logo.svg
 │   └── favicon.svg
 ├── templates/
-│   ├── base.html                  Shared app shell
-│   ├── index.html                 Upload / dashboard page
-│   ├── history.html                History page
-│   └── settings.html               Settings page
+│   ├── base.html Shared app shell
+│   ├── index.html Upload / dashboard page
+│   ├── history.html History page
+│   └── settings.html Settings page
 ├── tests/
-│   ├── conftest.py                 Test fixtures
-│   ├── test_api.py                  Endpoint tests
-│   └── test_ocr_service.py           Service unit tests
-├── requirements.txt                  Production dependencies
-├── requirements-dev.txt               + pytest, httpx
-├── .env.example                        Environment variable template
+│   ├── conftest.py Test fixtures
+│   ├── test_api.py Endpoint tests
+│   └── test_ocr_service.py Service unit tests
+├── requirements.txt Production dependencies
+├── requirements-dev.txt + pytest, httpx
+├── .env.example Environment variable template
 ├── .gitignore
-├── .vscode/                             Editor settings + extension picks
-├── Start App.bat                         Windows one-click startup
-├── Start App (Mac).command                macOS one-click startup
+├── .vscode/ Editor settings + extension picks
+├── Start App.bat Windows one-click startup
+├── Start App (Mac).command macOS one-click startup
 ├── LICENSE
 ├── README.md
 └── INSTRUCTION.md
